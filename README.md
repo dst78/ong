@@ -1,3 +1,5 @@
+![ONG screen](ong-screen.jpg)
+
 ONG is an ocean noise generator for Monome Norns.
 
 Even by the standards in the Norns ecosystem this script might be considered a bit more experimental than some others.
