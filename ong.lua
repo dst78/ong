@@ -22,14 +22,15 @@ Gfx = include("ong/lib/gfx")
 Params = include("ong/lib/parameters")
 
 engine.name = 'Ong'
+
 keydown={false, false, false}
 displayMode = 0
 
 function init()
-  Counters.init()
   Params.init()
-
+  Counters.init()
   Counters.ui:start()
+  
   redraw()
 end
 

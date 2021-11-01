@@ -1,5 +1,4 @@
 Gfx = {}
-Gfx.sin = 0
 Gfx.waves = {}
 Gfx.baseY = 30
 Gfx.waveWidth = 20
@@ -65,7 +64,6 @@ function Gfx.addWave(x)
     -- find empty spot
     if Gfx.waves[i] == nil then
       Gfx.waves[i] = {x, f}
-      --print("new wave added at index " .. i)
     end
   end
 end
