@@ -2,6 +2,7 @@ Params = {}
 
 function Params.init()
   local speedCtrl = controlspec.new(0.01, 4.0, "exp", 0, 0.16)
+  local volCtrl = controlspec.new(1, 10000, "exp", 0, 25)
 
   params:add_separator("~ ~ ~ ONG ~ ~ ~")
   params:add_number("masterAmp", "master volume", 0, 100, 80)
@@ -24,9 +25,9 @@ function Params.init()
   params:set_action("farWavesFilterCutoff", function(x) engine.farWavesFilterCutoff(x) end)
 
   params:add_separator("ambience")
-  params:add_number("foamAmp", "foam volume", 1, 10000, 20)
+  params:add_control("foamAmp", "foam volume", volCtrl)
   params:set_action("foamAmp", function(x) engine.foam(x*0.0001) end)
-  params:add_number("ambienceAmp", "ambience volume", 0, 10000, 30)
+  params:add_control("ambienceAmp", "ambience volume", volCtrl)
   params:set_action("ambienceAmp", function(x) engine.ambience(x*0.0001) end)
 end
 

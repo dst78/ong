@@ -30,7 +30,7 @@ function init()
   Params.init()
   Counters.init()
   Counters.ui:start()
-  
+
   redraw()
 end
 
@@ -66,7 +66,7 @@ function enc(n, d)
 
     elseif keydown[2] == false and keydown[3] == true then
       params:delta("foamAmp",d)
-      Help.line("K3+E2", params:get("foamAmp"))
+      Help.line("K3+E2", util.round(params:get("foamAmp"), 0.01))
     end
 
   elseif n == 3 then
@@ -80,7 +80,7 @@ function enc(n, d)
 
     elseif keydown[2] == false and keydown[3] == true then
       params:delta("ambienceAmp",d)
-      Help.line("K3+E3", params:get("ambienceAmp"))
+      Help.line("K3+E3", util.round(params:get("ambienceAmp"), 0.01))
     end
   else
     print("logic broke. HALP")
