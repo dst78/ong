@@ -1,6 +1,6 @@
 -- ocean noise generator
---   v0.9.0
---
+--   v1.0.0 @AnoikisNomads
+--   
 --   switch off the compressor
 --   no, really
 --
