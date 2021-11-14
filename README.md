@@ -1,4 +1,4 @@
-![ONG screen](ong-screen.jpg)
+![ONG screen](ong-screen.png)
 
 ONG is an ocean noise generator for Monome Norns.
 
