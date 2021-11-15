@@ -2,6 +2,8 @@
 
 ONG is an ocean noise generator for Monome Norns.
 
+[lines community thread](https://llllllll.co/t/ong-ocean-noise-generator-for-monome-norns/50364)
+
 Even by the standards in the Norns ecosystem this script might be considered a bit more experimental than some others.
 A little bit akin to the [Showers](https://norns.community/authors/justmat/showers) script by mat.
 
@@ -14,7 +16,7 @@ from maiden type
 
 ## dreamers
 
-ONG creates a soundscape that simulates ocean waves rolling in. I sincerely hope the soundscape bring you inner calm and relaxation.
+ONG creates a soundscape that simulates ocean waves rolling in. I sincerely hope the soundscape brings you inner calm and relaxation.
 
 Record it with tape, play other things on top of it. Enjoy, exhale and deflate and let your thoughts get lost.
 
