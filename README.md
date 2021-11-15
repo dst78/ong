@@ -7,6 +7,10 @@ A little bit akin to the [Showers](https://norns.community/authors/justmat/showe
 
 **Attention:** Switch off the compressor built-in to Norns when using ONG, it ruins everything.
 
+## install
+from maiden type
+;install https://github.com/dst78/ong
+
 ## dreamers
 
 ONG creates a soundscape that simulates ocean waves rolling in. I sincerely hope the soundscape bring you inner calm and relaxation.
@@ -26,6 +30,8 @@ There are a few controls to alter the sound, but ultimately it is several noise 
 * E3 far waves amplitude
 * K2+E3 far waves speed
 * K3+E3 ambience amplitude
+
+There are a bunch of other parameters that are available through the parameter page, but not mapped to encoders.
 
 ## historians
 ONG is my first own script in the Norns universe. I'm dipping my toes into all this, learning Lua and SuperCollider as I go along.
