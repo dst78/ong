@@ -26,12 +26,17 @@ engine.name = 'Ong'
 keydown={false, false, false}
 displayMode = 0
 
+local compressor_was_on = false
+
 function init()
   Params.init()
   Counters.init()
   Counters.ui:start()
 
-  audio.comp_off()
+  if params:string("compressor") == 'ON' then
+    compressor_was_on = true
+    audio.comp_off()
+  end
   redraw()
 end
 
@@ -106,7 +111,9 @@ function redraw()
 end
 
 function cleanup()
-  audio.comp_on()
+  if compressor_was_on then
+    audio.comp_on()
+  end
   Counters.cleanup()
 end
 
