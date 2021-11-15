@@ -9,7 +9,8 @@ A little bit akin to the [Showers](https://norns.community/authors/justmat/showe
 
 ## install
 from maiden type
-;install https://github.com/dst78/ong
+
+```;install https://github.com/dst78/ong```
 
 ## dreamers
 
