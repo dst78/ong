@@ -1,8 +1,8 @@
 -- ocean noise generator
 --   v1.0.0 @AnoikisNomads
---   
---   switch off the compressor
---   no, really
+--
+--
+--
 --
 -- ▼ instructions below ▼
 --
@@ -31,6 +31,7 @@ function init()
   Counters.init()
   Counters.ui:start()
 
+  audio.comp_off()
   redraw()
 end
 
@@ -105,6 +106,7 @@ function redraw()
 end
 
 function cleanup()
+  audio.comp_off()
   Counters.cleanup()
 end
 
