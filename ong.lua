@@ -106,7 +106,7 @@ function redraw()
 end
 
 function cleanup()
-  audio.comp_off()
+  audio.comp_on()
   Counters.cleanup()
 end
 
