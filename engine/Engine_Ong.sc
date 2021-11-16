@@ -33,11 +33,11 @@ Engine_Ong : CroneEngine {
 				ambienceAmpl=0.003;
 
 			//---- LFOs
-			var nearWavesAmplL = SinOsc.kr(nearWavesSpeedL, 0.0, nearWavesBaseAmpl, nearWavesBaseAmpl + 0.1);
-			var nearFoamAmplL = SinOsc.kr(nearWavesSpeedL, pi / 2, nearFoamAmpl, -1 * nearFoamAmpl);
-			var nearWavesAmplR = SinOsc.kr(nearWavesSpeedR, 0.0, nearWavesBaseAmpl, nearWavesBaseAmpl + 0.1);
-			var nearFoamAmplR = SinOsc.kr(nearWavesSpeedR, pi / 2, nearFoamAmpl, -1 * nearFoamAmpl);
-			var farWavesAmpl = SinOsc.kr(farWavesSpeed, 0.0, farWavesBaseAmpl, farWavesBaseAmpl + 0.1);
+			var nearWavesAmplL = SinOsc.ar(nearWavesSpeedL, 0.0, nearWavesBaseAmpl, nearWavesBaseAmpl + 0.1);
+			var nearFoamAmplL = SinOsc.ar(nearWavesSpeedL, pi / 2, nearFoamAmpl, -1 * nearFoamAmpl);
+			var nearWavesAmplR = SinOsc.ar(nearWavesSpeedR, 0.0, nearWavesBaseAmpl, nearWavesBaseAmpl + 0.1);
+			var nearFoamAmplR = SinOsc.ar(nearWavesSpeedR, pi / 2, nearFoamAmpl, -1 * nearFoamAmpl);
+			var farWavesAmpl = SinOsc.ar(farWavesSpeed, 0.0, farWavesBaseAmpl, farWavesBaseAmpl + 0.1);
 
 			//---- sound generators
 			var nearWavesL = LPF.ar(PinkNoise.ar(nearWavesAmplL, 0.0), nearWavesFilterCutoff, 1.0, 0.0);

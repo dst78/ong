@@ -22,7 +22,7 @@ function Counters.optician()
       Counters.ui.quarter_frame = Counters.ui.quarter_frame + 1
     end
 
-    Gfx.createWaves()
+    Gfx.createWaves(Counters.ui.frame)
     fn.screenDirty(true)
     redraw()
   end

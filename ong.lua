@@ -1,8 +1,7 @@
 -- ocean noise generator
---   v1.0.0 @AnoikisNomads
---   
---   switch off the compressor
---   no, really
+--   v1.0.1 @AnoikisNomads
+--
+-- _,/'2_,/'2_,/'2_,/'2_,/'2_,/'2_
 --
 -- ▼ instructions below ▼
 --
@@ -23,13 +22,16 @@ Params = include("ong/lib/parameters")
 
 engine.name = 'Ong'
 
-keydown={false, false, false}
-displayMode = 0
+local keydown={false, false, false}
+local displayMode = 0
+local compressorWasOn = false
 
 function init()
+  compressorOff()
   Params.init()
   Counters.init()
   Counters.ui:start()
+  Gfx.init()
 
   redraw()
 end
@@ -105,9 +107,25 @@ function redraw()
 end
 
 function cleanup()
+  compressorRestore()
   Counters.cleanup()
 end
 
 function rerun()
   norns.script.load(norns.state.script)
+end
+
+function compressorOff()
+  if params:string("compressor") == 'ON' then
+    compressorWasOn = true
+    params:set("compressor", 1)
+    audio.comp_off()
+  end
+end
+
+function compressorRestore()
+  if compressorWasOn then
+    params:set("compressor", 2)
+    audio.comp_on()
+  end
 end

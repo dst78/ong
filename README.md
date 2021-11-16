@@ -7,12 +7,12 @@ ONG is an ocean noise generator for Monome Norns.
 Even by the standards in the Norns ecosystem this script might be considered a bit more experimental than some others.
 A little bit akin to the [Showers](https://norns.community/authors/justmat/showers) script by mat.
 
-**Attention:** Switch off the compressor built-in to Norns when using ONG, it ruins everything.
-
 ## install
 from maiden type
 
-```;install https://github.com/dst78/ong```
+```
+;install https://github.com/dst78/ong
+```
 
 ## dreamers
 
@@ -43,3 +43,12 @@ I'm sure when I look at this in a couple of years or months I would structure ma
 
 ## lawyers
 ONG is deeply inspired by the Ocean Noise Generator "guitar" pedal built by [Syntherjack](https://syntherjack.net/ocean-noise-generator/). I'm releasing this software version with permission from them.
+
+## releases
+v1.0.1 ocean cleanup
+* decoupled the graphics from engine wave speed to prevent UI slowdown / hangs
+* converted all engine LFOs to audio rate to have cleaner sound when using very high frequencies
+* automatically deactivate compressor if it is on and restore original setting on exit (thanks @eigen for the hint)
+
+v1.0.0 first waves
+* initial release
