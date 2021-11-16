@@ -6,20 +6,32 @@ Gfx.waveHeight = 30
 Gfx.wavesSpeed = 0.17
 Gfx.wavesAmp = 23
 
-function Gfx.createWaves()
-  local s = math.sin(Counters.getFrame() / (1/Gfx.wavesSpeed))/2 + 0.5;
+function Gfx.init()
+  local f = Counters.getFrame()
+
+  for i=f-300,f do
+    Gfx.createWaves(i)
+  end
+end
+
+function Gfx.createWaves(f)
+  local s = math.sin(f / (1/Gfx.wavesSpeed))/2 + 0.5;
 
   for i=0,3 do
     if math.random() > s then
-      Gfx.addWave(math.random(-30, 158))
+      Gfx.addWave(f, math.random(-30, 158))
     end
   end
-
-  --print(tab.count(Gfx.waves))
 end
 
 function Gfx.display()
   local f = Counters.getFrame()
+  --[[
+  screen.level(15)
+  screen.move(100, 6)
+  screen.text(tab.count(Gfx.waves))
+  --]]
+
   -- near waves
   for i,w in ipairs(Gfx.waves) do
     if w ~= nil then
@@ -57,8 +69,7 @@ function Gfx.drawWave(wave, frame, index)
   return ty
 end
 
-function Gfx.addWave(x)
-  local f = Counters.getFrame()
+function Gfx.addWave(f, x)
   local n = 1+tab.count(Gfx.waves)
 
   for i = 1,n do

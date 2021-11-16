@@ -31,6 +31,7 @@ function init()
   Params.init()
   Counters.init()
   Counters.ui:start()
+  Gfx.init()
 
   redraw()
 end
