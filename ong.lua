@@ -27,14 +27,10 @@ local displayMode = 0
 local compressorWasOn = false
 
 function init()
+  compressorOff()
   Params.init()
   Counters.init()
   Counters.ui:start()
-
-  if params:string("compressor") == 'ON' then
-    compressorWasOn = true
-    audio.comp_off()
-  end
 
   redraw()
 end
@@ -110,13 +106,25 @@ function redraw()
 end
 
 function cleanup()
-  if compressorWasOn then
-    audio.comp_on()
-  end
-
+  compressorRestore()
   Counters.cleanup()
 end
 
 function rerun()
   norns.script.load(norns.state.script)
+end
+
+function compressorOff()
+  if params:string("compressor") == 'ON' then
+    compressorWasOn = true
+    params:set("compressor", 1)
+    audio.comp_off()
+  end
+end
+
+function compressorRestore()
+  if compressorWasOn then
+    params:set("compressor", 2)
+    audio.comp_on()
+  end
 end
