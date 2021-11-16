@@ -119,13 +119,11 @@ function compressorOff()
   if params:string("compressor") == 'ON' then
     compressorWasOn = true
     params:set("compressor", 1)
-    audio.comp_off()
   end
 end
 
 function compressorRestore()
   if compressorWasOn then
     params:set("compressor", 2)
-    audio.comp_on()
   end
 end
