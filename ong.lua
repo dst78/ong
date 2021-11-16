@@ -1,8 +1,7 @@
 -- ocean noise generator
 --   v1.0.0 @AnoikisNomads
---   
---   switch off the compressor
---   no, really
+--
+-- _,/'2_,/'2_,/'2_,/'2_,/'2_,/'2_
 --
 -- ▼ instructions below ▼
 --
@@ -23,13 +22,19 @@ Params = include("ong/lib/parameters")
 
 engine.name = 'Ong'
 
-keydown={false, false, false}
-displayMode = 0
+local keydown={false, false, false}
+local displayMode = 0
+local compressorWasOn = false
 
 function init()
   Params.init()
   Counters.init()
   Counters.ui:start()
+
+  if params:string("compressor") == 'ON' then
+    compressorWasOn = true
+    audio.comp_off()
+  end
 
   redraw()
 end
@@ -105,6 +110,10 @@ function redraw()
 end
 
 function cleanup()
+  if compressorWasOn then
+    audio.comp_on()
+  end
+
   Counters.cleanup()
 end
 
