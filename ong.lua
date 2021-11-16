@@ -1,5 +1,5 @@
 -- ocean noise generator
---   v1.0.1 @AnoikisNomads
+--   v1.0.2 @AnoikisNomads
 --
 -- _,/'2_,/'2_,/'2_,/'2_,/'2_,/'2_
 --

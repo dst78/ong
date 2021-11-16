@@ -45,6 +45,11 @@ I'm sure when I look at this in a couple of years or months I would structure ma
 ONG is deeply inspired by the Ocean Noise Generator "guitar" pedal built by [Syntherjack](https://syntherjack.net/ocean-noise-generator/). I'm releasing this software version with permission from them.
 
 ## releases
+v1.0.2 viscosity
+* re-coupled the wave graphics to the sound engine parameters for a more pleasant
+tweaking experience. the graphic generation has been optimized and should be lag-free now
+* minor code cleanup
+
 v1.0.1 ocean cleanup
 * decoupled the graphics from engine wave speed to prevent UI slowdown / hangs
 * converted all engine LFOs to audio rate to have cleaner sound when using very high frequencies

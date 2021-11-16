@@ -1,7 +1,7 @@
 Params = {}
 
 function Params.init()
-  local speedCtrl = controlspec.new(0.01, 400.0, "exp", 0, 0.16)
+  local speedCtrl = controlspec.new(0.01, 4000.0, "exp", 0, 0.16)
   local volCtrl = controlspec.new(1, 10000, "exp", 0, 25)
 
   params:add_separator("~ ~ ~ ONG ~ ~ ~")
