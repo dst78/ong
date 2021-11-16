@@ -46,6 +46,7 @@ ONG is deeply inspired by the Ocean Noise Generator "guitar" pedal built by [Syn
 
 ## releases
 v1.0.1 ocean cleanup
+* decoupled the graphics from engine wave speed to prevent UI slowdown / hangs
 * converted all engine LFOs to audio rate to have cleaner sound when using very high frequencies
 * automatically deactivate compressor if it is on and restore original setting on exit (thanks @eigen for the hint)
 
