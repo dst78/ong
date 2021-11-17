@@ -5,6 +5,7 @@ Gfx.waveWidth = 20
 Gfx.waveHeight = 30
 Gfx.wavesSpeed = 0.17
 Gfx.wavesAmp = 23
+Gfx.waveMatrix1 = {{0, 0, 0, 0, 2, 0, 0, 0, 0, 0}, {0, 0, 0, 1, 1, 1, 1, 0, 0, 0}, {0, 0, 0, 0, 1, 1, 1, 1, 0, 0}, {0, 0, 0, 0, 1, 1, 1, 1, 0, 0}, {0, 0, 0, 1, 1, 1, 1, 0, 0, 0}, {1, 1, 0, 0, 2, 0, 0, 0, 0, 0}, {1, 2, 2, 2, 2, 2, 2, 2, 2, 2}, {1, 1, 0, 1, 0, 1, 0, 1, 0, 0}, {0, 1, 1, 1, 1, 1, 1, 0, 0, 0}}
 
 function Gfx.init()
   local f = Counters.getFrame()
@@ -32,6 +33,9 @@ function Gfx.display()
 
   Gfx.wavesSpeed = util.clamp(params:get("nearWavesSpeed"), 0.05, 1.0)
   Gfx.wavesAmp = params:get("nearWavesAmp")
+
+  -- update matrices
+  Gfx.s(-1350 + f % 1500, Gfx.baseY - 9, Gfx.waveMatrix1)
 
   -- near waves
   for i,w in ipairs(Gfx.waves) do
@@ -98,6 +102,23 @@ function Gfx.setLevel(y)
   elseif y > 30 then level = 2
   end
   screen.level(level)
+end
+
+function Gfx.s(x, y, sprite)
+  local lx = tab.count(sprite[1])
+  local ly = tab.count(sprite)
+
+  if x + lx >= 0 and x < 128 and y+ly >= 0 and y+ly < 64 then
+    for sy=1,ly do
+      for sx=1,lx do
+        if sprite[sy][sx] > 0 then
+          screen.level(sprite[sy][sx])
+          screen.pixel(x + sx, y + sy)
+          screen.fill()
+        end
+      end
+    end
+  end
 end
 
 
