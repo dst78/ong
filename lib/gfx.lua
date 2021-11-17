@@ -6,6 +6,10 @@ Gfx.waveHeight = 30
 Gfx.wavesSpeed = 0.17
 Gfx.wavesAmp = 23
 Gfx.waveMatrix1 = {{0, 0, 0, 0, 2, 0, 0, 0, 0, 0}, {0, 0, 0, 1, 1, 1, 1, 0, 0, 0}, {0, 0, 0, 0, 1, 1, 1, 1, 0, 0}, {0, 0, 0, 0, 1, 1, 1, 1, 0, 0}, {0, 0, 0, 1, 1, 1, 1, 0, 0, 0}, {1, 1, 0, 0, 2, 0, 0, 0, 0, 0}, {1, 2, 2, 2, 2, 2, 2, 2, 2, 2}, {1, 1, 0, 1, 0, 1, 0, 1, 0, 0}, {0, 1, 1, 1, 1, 1, 1, 0, 0, 0}}
+Gfx.waveMatrix2 = {{0, 0, 0, 1, 1, 1, 4, 4, 0, 0, 0, 0}, {0, 0, 1, 1, 1, 1, 1, 1, 4, 0, 0, 0}, {0, 1, 1, 2, 2, 2, 2, 2, 2, 4, 0, 0}, {1, 1, 2, 2, 2, 2, 2, 2, 2, 4, 0, 0}, {1, 1, 2, 2, 5, 9, 1, 2, 9, 2, 0, 0}, {1, 1, 2, 2, 5, 1, 2, 1, 5, 1, 0, 0}, {1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 4, 0}, {0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 4, 0}, {0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 0, 0}, {0, 1, 2, 1, 2, 2, 2, 1, 2, 2, 4, 0}, {0, 1, 2, 2, 2, 2, 3, 2, 1, 2, 4, 0}, {1, 2, 2, 1, 1, 1, 2, 4, 1, 1, 2, 4}, {1, 1, 1, 0, 0, 1, 1, 4, 0, 1, 1, 2}, {0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0}}
+Gfx.matrix2OffsetX = 0
+Gfx.matrix2OffsetY = 0
+Gfx.matrix2Draw = false
 
 function Gfx.init()
   local f = Counters.getFrame()
@@ -45,14 +49,16 @@ function Gfx.display()
     end
   end
 
+  Gfx.m2(f)
+
   -- foam
   local fL = 4 * math.log(params:get("foamAmp"))
   for n = 0,fL*math.sin(f / (2.4 / Gfx.wavesSpeed) - 1.8) do
     y = math.random(60, 63)
     Gfx.setLevel(y)
     screen.pixel(math.random(0, 127), y)
-    screen.fill()
   end
+  screen.fill()
 end
 
 function Gfx.drawWave(wave, frame, index)
@@ -104,15 +110,33 @@ function Gfx.setLevel(y)
   screen.level(level)
 end
 
-function Gfx.s(x, y, sprite)
-  local lx = tab.count(sprite[1])
-  local ly = tab.count(sprite)
+function Gfx.m2(f)
+  local o2 = math.sin(f/20) * 12
+
+  if o2 > 0 and o2 < 0.3 and math.random(0, 100) > 95 then
+    Gfx.matrix2OffsetX = math.random(5, 110)
+    Gfx.matrix2OffsetY = math.random(0, 15)
+    Gfx.matrix2Draw = true
+  elseif o2 < 0 then
+    Gfx.matrix2Draw = false
+  end
+
+  if Gfx.matrix2Draw == true then
+    Gfx.s(Gfx.matrix2OffsetX, Gfx.baseY + Gfx.matrix2OffsetY - o2, Gfx.waveMatrix2, o2)
+  end
+end
+
+function Gfx.s(x, y, s, stopy)
+  local lx = tab.count(s[1])
+  local ly = tab.count(s)
+  stopy = stopy or ly
+  ly = math.min(ly, stopy)
 
   if x + lx >= 0 and x < 128 and y+ly >= 0 and y+ly < 64 then
     for sy=1,ly do
       for sx=1,lx do
-        if sprite[sy][sx] > 0 then
-          screen.level(sprite[sy][sx])
+        if s[sy][sx] > 0 then
+          screen.level(s[sy][sx])
           screen.pixel(x + sx, y + sy)
           screen.fill()
         end
