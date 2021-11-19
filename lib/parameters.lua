@@ -31,6 +31,10 @@ function Params.init()
   params:set_action("ambienceAmp", function(x) engine.ambience(x*0.0001) end)
   params:add_control("ambienceFilterCutoff", "filter cutoff", controlspec.new(20, 10000, "exp", 0, 10000, "hz"))
   params:set_action("ambienceFilterCutoff", function(x) engine.ambienceFilterCutoff(x) end)
+
+  params:add_separator("fog horns")
+  params:add_trigger("triggerFoghorn", "sound fog horn")
+  params:set_action("triggerFoghorn", function() engine.triggerFoghorn(params:get("nearWavesAmp") * 0.01) end)
 end
 
 return Params

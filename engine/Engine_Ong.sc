@@ -13,25 +13,22 @@ Engine_Ong : CroneEngine {
 		// Return the object from the superclass (CroneEngine) .new method
 		^super.new(context, doneCallback);
 	}
-	// Rather than defining a SynthDef, use a shorthand to allocate a function and send it to the engine to play
-	// Defined as an empty method in CroneEngine
-	// https://github.com/monome/norns/blob/master/sc/core/CroneEngine.sc#L31
+
 	alloc {
-		// Define the synth variable, which is a function
-		synth = {
-			// define arguments to the function
+		// synth
+		SynthDef(\Ong, {
 			arg out,
-				overallAmpl=1.0,
-				nearWavesBaseAmpl=0.7,
-				nearWavesSpeedL=0.15,
-				nearWavesSpeedR=0.17,
-				nearWavesFilterCutoff=3000,
-				farWavesBaseAmpl=0.5,
-				farWavesSpeed=0.13,
-				farWavesFilterCutoff=840,
-				nearFoamAmpl=0.002,
-				ambienceAmpl=0.003,
-				ambienceFilterCutoff=10000;
+			overallAmpl=1.0,
+			nearWavesBaseAmpl=0.7,
+			nearWavesSpeedL=0.15,
+			nearWavesSpeedR=0.17,
+			nearWavesFilterCutoff=3000,
+			farWavesBaseAmpl=0.5,
+			farWavesSpeed=0.13,
+			farWavesFilterCutoff=840,
+			nearFoamAmpl=0.002,
+			ambienceAmpl=0.003,
+			ambienceFilterCutoff=10000;
 
 			//---- LFOs
 			var nearWavesAmplL = SinOsc.ar(nearWavesSpeedL, 0.0, nearWavesBaseAmpl, nearWavesBaseAmpl + 0.1);
@@ -65,10 +62,33 @@ Engine_Ong : CroneEngine {
 					farWaves * overallAmpl
 				])  // right stereo
 			]);
+		}).add;
 
+		// foghorn as used by ships
+		SynthDef(\Foghorn, {
+			arg out, vol = 0.1;
 
-		// Send the synth function to the engine as a UGen graph.
-		}.play(args: [\out, context.out_b], target: context.xg);
+			var pan = Rand(0.2, 0.8);
+			var dur = Rand(2.0, 4.0);
+			var freq = IRand(35, 60);
+			var amp = Env([0, 1, 0.6, 0.8, 0], [0.1, 0.2, dur, 0.2]);
+			var wave = Saw.ar(freq, 1.0);
+
+			// FreeVerb.ar(in, mix, roomsize, damp, mul, add)
+			var filtered = FreeVerb.ar(
+				LPF.ar(
+					Decay.ar(wave, 0.25, LFCub.ar(freq*2.04, 0, 0.2)),
+					500,
+					EnvGen.kr(amp)
+			), 0.8, 0.7, 0.7, vol);
+
+			filtered = Limiter.ar(filtered, 0.8);
+
+			Out.ar(out, [filtered * pan, filtered * (1.0-pan)]);
+			FreeSelfWhenDone.kr(Line.kr(vol, 0, dur+2));
+		}).add;
+
+		synth = Synth.new(\Ong);
 
 		this.addCommand("amp", "f", { arg msg;
 			synth.set(\overallAmpl, msg[1]);
@@ -100,6 +120,13 @@ Engine_Ong : CroneEngine {
 		});
 		this.addCommand("farWavesFilterCutoff", "f", { arg msg;
 			synth.set(\farWavesFilterCutoff, msg[1]);
+		});
+		this.addCommand("triggerFoghorn", "b", { arg msg;
+			// the Foghorn synthdef is self-freeing
+			synth.get(\nearWavesBaseAmpl, {
+				arg v;
+				Synth.new(\Foghorn, [\vol, v * 1.3]);
+			});
 		});
 	}
 	// define a function that is called when the synth is shut down
