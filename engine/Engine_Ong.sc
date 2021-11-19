@@ -30,7 +30,8 @@ Engine_Ong : CroneEngine {
 				farWavesSpeed=0.13,
 				farWavesFilterCutoff=840,
 				nearFoamAmpl=0.002,
-				ambienceAmpl=0.003;
+				ambienceAmpl=0.003,
+				ambienceFilterCutoff=10000;
 
 			//---- LFOs
 			var nearWavesAmplL = SinOsc.ar(nearWavesSpeedL, 0.0, nearWavesBaseAmpl, nearWavesBaseAmpl + 0.1);
@@ -45,7 +46,7 @@ Engine_Ong : CroneEngine {
 			var nearWavesR = LPF.ar(PinkNoise.ar(nearWavesAmplR, 0.0), nearWavesFilterCutoff, 1.0, 0.0);
 			var nearFoamR = WhiteNoise.ar(nearFoamAmplR, 0.0);
 			var farWaves = LPF.ar(PinkNoise.ar(farWavesAmpl, 0.0), farWavesFilterCutoff, 1.0, 0.0);
-			var ambience = WhiteNoise.ar(ambienceAmpl, 0.0);
+			var ambience = LPF.ar(WhiteNoise.ar(ambienceAmpl, 0.0), ambienceFilterCutoff, 1.0, 0.0);
 
 			// Create an output object
 			Out.ar(out, [
@@ -72,36 +73,31 @@ Engine_Ong : CroneEngine {
 		this.addCommand("amp", "f", { arg msg;
 			synth.set(\overallAmpl, msg[1]);
 		});
-
 		this.addCommand("nearWavesAmp", "f", { arg msg;
 			synth.set(\nearWavesBaseAmpl, msg[1]);
 		});
-
 		this.addCommand("farWavesAmp", "f", { arg msg;
 			synth.set(\farWavesBaseAmpl, msg[1]);
 		});
-
 		this.addCommand("foam", "f", { arg msg;
 			synth.set(\nearFoamAmpl, msg[1]);
 		});
-
 		this.addCommand("ambience", "f", { arg msg;
 			synth.set(\ambienceAmpl, msg[1]);
 		});
-
+		this.addCommand("ambienceFilterCutoff", "f", { arg msg;
+			synth.set(\ambienceFilterCutoff, msg[1]);
+		});
 		this.addCommand("nearWavesSpeed", "f", { arg msg;
 			synth.set(\nearWavesSpeedL, msg[1] - (msg[1] * 0.06));
 			synth.set(\nearWavesSpeedR, msg[1] + (msg[1] * 0.06));
 		});
-
 		this.addCommand("farWavesSpeed", "f", { arg msg;
 			synth.set(\farWavesSpeed, msg[1]);
 		});
-
 		this.addCommand("nearWavesFilterCutoff", "f", { arg msg;
 			synth.set(\nearWavesFilterCutoff, msg[1]);
 		});
-
 		this.addCommand("farWavesFilterCutoff", "f", { arg msg;
 			synth.set(\farWavesFilterCutoff, msg[1]);
 		});

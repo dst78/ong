@@ -29,6 +29,8 @@ function Params.init()
   params:set_action("foamAmp", function(x) engine.foam(x*0.0001) end)
   params:add_control("ambienceAmp", "ambience volume", volCtrl)
   params:set_action("ambienceAmp", function(x) engine.ambience(x*0.0001) end)
+  params:add_control("ambienceFilterCutoff", "filter cutoff", controlspec.new(20, 10000, "exp", 0, 10000, "hz"))
+  params:set_action("ambienceFilterCutoff", function(x) engine.ambienceFilterCutoff(x) end)
 end
 
 return Params
