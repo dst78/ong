@@ -7,10 +7,11 @@ Gfx.wavesSpeed = 0.17
 Gfx.wavesAmp = 23
 Gfx.waveMatrix1 = {{0, 0, 0, 0, 2, 0, 0, 0, 0, 0}, {0, 0, 0, 1, 1, 1, 1, 0, 0, 0}, {0, 0, 0, 0, 1, 1, 1, 1, 0, 0}, {0, 0, 0, 0, 1, 1, 1, 1, 0, 0}, {0, 0, 0, 1, 1, 1, 1, 0, 0, 0}, {1, 1, 0, 0, 2, 0, 0, 0, 0, 0}, {1, 2, 2, 2, 2, 2, 2, 2, 2, 2}, {1, 1, 0, 1, 0, 1, 0, 1, 0, 0}, {0, 1, 1, 1, 1, 1, 1, 0, 0, 0}}
 Gfx.waveMatrix1F = 100;
+Gfx.waveMatrix1Draw = false
 Gfx.waveMatrix2 = {{0, 0, 0, 1, 1, 1, 4, 4, 0, 0, 0, 0}, {0, 0, 1, 1, 1, 1, 1, 1, 4, 0, 0, 0}, {0, 1, 1, 2, 2, 2, 2, 2, 2, 4, 0, 0}, {1, 1, 2, 2, 2, 2, 2, 2, 2, 4, 0, 0}, {1, 1, 2, 2, 5, 9, 1, 2, 9, 2, 0, 0}, {1, 1, 2, 2, 5, 1, 2, 1, 5, 1, 0, 0}, {1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 4, 0}, {0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 4, 0}, {0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 0, 0}, {0, 1, 2, 1, 2, 2, 2, 1, 2, 2, 4, 0}, {0, 1, 2, 2, 2, 2, 3, 2, 1, 2, 4, 0}, {1, 2, 2, 1, 1, 1, 2, 4, 1, 1, 2, 4}, {1, 1, 1, 0, 0, 1, 1, 4, 0, 1, 1, 2}, {0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0}}
-Gfx.matrix2OffsetX = 0
-Gfx.matrix2OffsetY = 0
-Gfx.matrix2Draw = false
+Gfx.waveMatrix2OffsetX = 0
+Gfx.waveMatrix2OffsetY = 0
+Gfx.waveMatrix2Draw = false
 
 function Gfx.init()
   local f = Counters.getFrame()
@@ -39,6 +40,8 @@ function Gfx.display()
   Gfx.wavesSpeed = util.clamp(params:get("nearWavesSpeed"), 0.05, 1.0)
   Gfx.wavesAmp = params:get("nearWavesAmp")
 
+  Gfx.drawShip(f)
+
   -- near waves
   for i,w in ipairs(Gfx.waves) do
     if w ~= nil then
@@ -46,6 +49,8 @@ function Gfx.display()
       Gfx.removeWave(i, Gfx.drawWave(w, f, i))
     end
   end
+
+  Gfx.drawKraken()
 
   -- foam
   local fL = 4 * math.log(params:get("foamAmp") + 0.1)
@@ -106,28 +111,37 @@ function Gfx.setLevel(y)
   screen.level(level)
 end
 
---[[
-    Gfx.sprite(-20 + (f - Counters.horn), Gfx.baseY - 9, Counters.horn)
-    if (Counters.horn + 150) < f then
-    elseif Counters.horn + 74 == f then
+function Gfx.doDrawShip()
+  if not Gfx.waveMatrix1Draw then
+    Gfx.waveMatrix1F = Counters.getFrame()
+    Gfx.waveMatrix1Draw = true
+  end
+end
 
+function Gfx.drawShip(f)
+  if Gfx.waveMatrix1Draw then
+    Gfx.sprite(-20 + (f - Gfx.waveMatrix1F), Gfx.baseY - 9, Gfx.waveMatrix1)
+
+    if Gfx.waveMatrix1F + 150 < f then
+      Gfx.waveMatrix1Draw = false
     end
---]]
+  end
+end
 
-function Gfx.kraken()
+function Gfx.drawKraken()
   local f = Counters.getFrame()
   local o2 = math.sin(f/20) * 12
 
   if o2 > 0 and o2 < 0.3 and math.random(0, 100) > 95 then
-    Gfx.matrix2OffsetX = math.random(5, 110)
-    Gfx.matrix2OffsetY = math.random(0, 15)
-    Gfx.matrix2Draw = true
+    Gfx.waveMatrix2OffsetX = math.random(5, 110)
+    Gfx.waveMatrix2OffsetY = math.random(0, 15)
+    Gfx.waveMatrix2Draw = true
   elseif o2 < 0 then
-    Gfx.matrix2Draw = false
+    Gfx.waveMatrix2Draw = false
   end
 
-  if Gfx.matrix2Draw == true then
-    Gfx.sprite(Gfx.matrix2OffsetX, Gfx.baseY + Gfx.matrix2OffsetY - o2, Gfx.waveMatrix2, o2)
+  if Gfx.waveMatrix2Draw then
+    Gfx.sprite(Gfx.waveMatrix2OffsetX, Gfx.baseY + Gfx.waveMatrix2OffsetY - o2, Gfx.waveMatrix2, o2)
   end
 end
 

@@ -19,15 +19,15 @@ Engine_Ong : CroneEngine {
 		SynthDef(\Ong, {
 			arg out,
 			overallAmpl=1.0,
-			nearWavesBaseAmpl=0.7,
-			nearWavesSpeedL=0.11,
-			nearWavesSpeedR=0.13,
+			nearWavesBaseAmpl=0.8,
+			nearWavesSpeedL=0.08,
+			nearWavesSpeedR=0.12,
 			nearWavesFilterCutoff=3000,
-			farWavesBaseAmpl=0.5,
+			farWavesBaseAmpl=0.7,
 			farWavesSpeed=0.1,
 			farWavesFilterCutoff=840,
-			nearFoamAmpl=0.08,
-			ambienceAmpl=0.003,
+			nearFoamAmpl=0.07,
+			ambienceAmpl=0.0001,
 			ambienceFilterCutoff=10000;
 
 			//---- LFOs
@@ -121,12 +121,9 @@ Engine_Ong : CroneEngine {
 		this.addCommand("farWavesFilterCutoff", "f", { arg msg;
 			synth.set(\farWavesFilterCutoff, msg[1]);
 		});
-		this.addCommand("triggerFoghorn", "b", { arg msg;
+		this.addCommand("triggerFoghorn", "f", { arg msg;
 			// the Foghorn synthdef is self-freeing
-			synth.get(\nearWavesBaseAmpl, {
-				arg v;
-				Synth.new(\Foghorn, [\vol, v]);
-			});
+			Synth.new(\Foghorn, [\vol, msg[1]]);
 		});
 	}
 	// define a function that is called when the synth is shut down

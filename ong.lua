@@ -1,7 +1,8 @@
 -- ocean noise generator
---   v1.0.4 @AnoikisNomads
+--   v1.1.0 @AnoikisNomads
 --
 -- _,/'2_,/'2_,/'2_,/'2_,/'2_,/'2_
+-- '2_,/'2_,/'2_,/'2_,/'2_,/'2_,/2
 --
 -- ▼ instructions below ▼
 --
@@ -19,6 +20,7 @@ fn = include("ong/lib/functions")
 Counters = include("ong/lib/counters")
 Gfx = include("ong/lib/gfx")
 Params = include("ong/lib/parameters")
+Foghorn = include("ong/lib/foghorn")
 
 engine.name = 'Ong'
 
@@ -93,7 +95,6 @@ function redraw()
 
   if displayMode == 0 then    -- standard screen
     Gfx.display()
-    Gfx.kraken()
     Help.displayLine()
   elseif displayMode == 1 then    -- help screen
     Help.display()
@@ -122,14 +123,5 @@ end
 function compressorRestore()
   if compressorWasOn then
     params:set("compressor", 2)
-  end
-end
-
-function foghorn()
-  local f = Counters.getFrame()
-
-  if Params.foghornsEnabled and f >= Counters.horn then
-    engine.triggerFoghorn(math.max(params:get("nearWavesAmp"), params:get("farWavesAmp")) * 0.01)
-    Counters.horn = math.random(f + 3500, f + 10000)
   end
 end
