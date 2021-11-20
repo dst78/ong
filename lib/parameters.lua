@@ -2,7 +2,6 @@ Params = {}
 
 function Params.init()
   local speedCtrl = controlspec.new(0.01, 4000.0, "exp", 0, 0.09)
-  local volCtrl = controlspec.new(0.0001, 1, "exp", 0, 0.0001)
 
   params:add_separator("~ ~ ~ ONG ~ ~ ~")
   params:add_number("masterAmp", "master volume", 0, 100, 100)
@@ -25,12 +24,11 @@ function Params.init()
   params:set_action("farWavesFilterCutoff", function(x) engine.farWavesFilterCutoff(x) end)
 
   params:add_separator("ambience")
-  --params:add_control("foamAmp", "foam volume", volCtrl)
   params:add_number("foamAmp", "foam amplitude", 0, 100, 8)
   params:set_action("foamAmp", function(x) engine.foam(x * 0.01) end)
-  params:add_control("ambienceAmp", "ambience amplitude", volCtrl)
+  params:add_control("ambienceAmp", "ambience amplitude", controlspec.new(0.0001, 1, "exp", 0, 0.02))
   params:set_action("ambienceAmp", function(x) engine.ambience(x) end)
-  params:add_control("ambienceFilterCutoff", "filter freq", controlspec.new(20, 10000, "exp", 0, 10000, "hz"))
+  params:add_control("ambienceFilterCutoff", "filter freq", controlspec.new(20, 10000, "exp", 0, 3000, "hz"))
   params:set_action("ambienceFilterCutoff", function(x) engine.ambienceFilterCutoff(x) end)
 
   Params.foghornsEnabled = false

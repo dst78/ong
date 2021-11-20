@@ -28,8 +28,8 @@ Engine_Ong : CroneEngine {
 			farWavesSpeed=0.1,
 			farWavesFilterCutoff=840,
 			nearFoamAmpl=0.07,
-			ambienceAmpl=0.0001,
-			ambienceFilterCutoff=10000;
+			ambienceAmpl=0.02,
+			ambienceFilterCutoff=3000;
 
 			//---- LFOs
 			var nearWavesAmplL = SinOsc.ar(nearWavesSpeedL, 0.0, nearWavesBaseAmpl);
