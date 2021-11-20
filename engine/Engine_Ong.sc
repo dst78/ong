@@ -7,6 +7,7 @@
 Engine_Ong : CroneEngine {
 	// Define a getter for the synth variable
 	var <synth;
+	var <weather;
 
 	// Define a class method when an object is created
 	*new { arg context, doneCallback;
@@ -88,7 +89,34 @@ Engine_Ong : CroneEngine {
 			FreeSelfWhenDone.kr(Line.kr(vol, 0, dur+2));
 		}).add;
 
+		// rain and thunder
+		SynthDef(\Weather, {
+			arg out,
+			vol = 0.0,
+			rainVol = 1.0,
+			thunderVol = 0.7,
+			thunderSize = 270,
+			thunderTime = 8,
+			thunderCutoff = 700;
+			var rain, thunder, rainReverb, thunderReverb, sig;
+
+			rain = PinkNoise.ar(0.08 + LFNoise1.kr(0.3, 0.02)) + LPF.ar(Dust2.ar(LFNoise1.kr(0.2).range(40, 50)), 7000);
+			rain = HPF.ar(rain, 400);
+			rainReverb = tanh(3 * GVerb.ar(rain, 250, 100, 0.25, drylevel: 0.3)) * rainVol * Line.kr(0, rain, 10);
+
+			thunder = PinkNoise.ar(LFNoise1.kr(3).clip(0, 1) * LFNoise1.kr(2).clip(0, 1) ** 1.8);
+			thunder = LPF.ar( 10 * HPF.ar(thunder, 20), LFNoise1.kr(1).exprange(100, 2500)).tanh;
+			thunderReverb = GVerb.ar(thunder, thunderSize, thunderTime, 0.7, drylevel: 0.5) * thunderVol * Line.kr(0, thunderVol, 30);
+			thunderReverb = LPF.ar(thunderReverb, thunderCutoff);
+
+			sig = Mix.new([rainReverb * vol, thunderReverb * vol]);
+			sig = Limiter.ar(sig);
+
+			Out.ar(out, sig);
+		}).add;
+
 		synth = Synth.new(\Ong);
+		weather = Synth.new(\Weather);
 
 		this.addCommand("amp", "f", { arg msg;
 			synth.set(\overallAmpl, msg[1]);
@@ -121,13 +149,34 @@ Engine_Ong : CroneEngine {
 		this.addCommand("farWavesFilterCutoff", "f", { arg msg;
 			synth.set(\farWavesFilterCutoff, msg[1]);
 		});
+
 		this.addCommand("triggerFoghorn", "f", { arg msg;
 			// the Foghorn synthdef is self-freeing
 			Synth.new(\Foghorn, [\vol, msg[1]]);
+		});
+
+		this.addCommand("weatherOverallAmp", "f", { arg msg;
+			weather.set(\vol, msg[1])
+		});
+		this.addCommand("weatherRainAmp", "f", { arg msg;
+			weather.set(\rainVol, msg[1])
+		});
+		this.addCommand("weatherThunderAmp", "f", { arg msg;
+			weather.set(\thunderVol, msg[1])
+		});
+		this.addCommand("weatherThunderSize", "f", { arg msg;
+			weather.set(\thunderSize, msg[1])
+		});
+		this.addCommand("weatherThunderTime", "f", { arg msg;
+			weather.set(\thunderTime, msg[1])
+		});
+		this.addCommand("weatherFilterCutoff", "f", { arg msg;
+			weather.set(\thunderCutoff, msg[1])
 		});
 	}
 	// define a function that is called when the synth is shut down
 	free {
 		synth.free;
+		weather.free;
 	}
 }
