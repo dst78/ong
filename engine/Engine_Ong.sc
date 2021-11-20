@@ -31,36 +31,36 @@ Engine_Ong : CroneEngine {
 			ambienceFilterCutoff=10000;
 
 			//---- LFOs
-			var nearWavesAmplL = SinOsc.ar(nearWavesSpeedL, 0.0, nearWavesBaseAmpl, nearWavesBaseAmpl + 0.1);
-			var nearFoamAmplL = SinOsc.ar(nearWavesSpeedL, pi / 2, nearFoamAmpl, -1 * nearFoamAmpl);
-			var nearWavesAmplR = SinOsc.ar(nearWavesSpeedR, 0.0, nearWavesBaseAmpl, nearWavesBaseAmpl + 0.1);
-			var nearFoamAmplR = SinOsc.ar(nearWavesSpeedR, pi / 2, nearFoamAmpl, -1 * nearFoamAmpl);
-			var farWavesAmpl = SinOsc.ar(farWavesSpeed, 0.0, farWavesBaseAmpl, farWavesBaseAmpl + 0.1);
+			var nearWavesAmplL = SinOsc.ar(nearWavesSpeedL, 0.0, nearWavesBaseAmpl);
+			var nearFoamAmplL = SinOsc.ar(nearWavesSpeedL, pi / 4, nearFoamAmpl);
+			var nearWavesAmplR = SinOsc.ar(nearWavesSpeedR, 0.0, nearWavesBaseAmpl);
+			var nearFoamAmplR = SinOsc.ar(nearWavesSpeedR, pi / 4, nearFoamAmpl);
+			var farWavesAmpl = SinOsc.ar(farWavesSpeed, 0.0, farWavesBaseAmpl); 
 
 			//---- sound generators
-			var nearWavesL = LPF.ar(PinkNoise.ar(nearWavesAmplL, 0.0), nearWavesFilterCutoff, 1.0, 0.0);
-			var nearFoamL = WhiteNoise.ar(nearFoamAmplL, 0.0);
-			var nearWavesR = LPF.ar(PinkNoise.ar(nearWavesAmplR, 0.0), nearWavesFilterCutoff, 1.0, 0.0);
-			var nearFoamR = WhiteNoise.ar(nearFoamAmplR, 0.0);
-			var farWaves = LPF.ar(PinkNoise.ar(farWavesAmpl, 0.0), farWavesFilterCutoff, 1.0, 0.0);
-			var ambience = LPF.ar(WhiteNoise.ar(ambienceAmpl, 0.0), ambienceFilterCutoff, 1.0, 0.0);
+			var nearWavesL = LPF.ar(PinkNoise.ar(1.0, 0.0), nearWavesFilterCutoff, 1.0, 0.0);
+			var nearFoamL = WhiteNoise.ar(1.0, 0.0);
+			var nearWavesR = LPF.ar(PinkNoise.ar(1.0, 0.0), nearWavesFilterCutoff, 1.0, 0.0);
+			var nearFoamR = WhiteNoise.ar(1.0, 0.0);
+			var farWaves = LPF.ar(PinkNoise.ar(1.0, 0.0), farWavesFilterCutoff, 1.0, 0.0);
+			var ambience = LPF.ar(WhiteNoise.ar(1.0, 0.0), ambienceFilterCutoff, 1.0, 0.0);
 
 			// Create an output object
 			Out.ar(out, [
 				Mix.new([
-					nearWavesL * 0.7 * overallAmpl,
-					nearWavesR * 0.1 * overallAmpl,
-					nearFoamL * overallAmpl,
-					ambience * overallAmpl,
-					farWaves * overallAmpl
-				]), // left stereo
+					nearWavesL * 0.7 * nearWavesAmplL,
+					nearWavesR * 0.1 * nearWavesAmplR,
+					nearFoamL * nearFoamAmplL,
+					ambience * ambienceAmpl,
+					farWaves * farWavesAmpl
+				]) * overallAmpl, // left stereo
 				Mix.new([
-					nearWavesL * 0.1 * overallAmpl,
-					nearWavesR * 0.7 * overallAmpl,
-					nearFoamR * overallAmpl,
-					ambience * overallAmpl,
-					farWaves * overallAmpl
-				])  // right stereo
+					nearWavesL * 0.1 * nearWavesAmplL,
+					nearWavesR * 0.7 * nearWavesAmplR,
+					nearFoamR * nearFoamAmplR,
+					ambience * ambienceAmpl,
+					farWaves * farWavesAmpl
+				]) * overallAmpl  // right stereo
 			]);
 		}).add;
 
@@ -125,7 +125,7 @@ Engine_Ong : CroneEngine {
 			// the Foghorn synthdef is self-freeing
 			synth.get(\nearWavesBaseAmpl, {
 				arg v;
-				Synth.new(\Foghorn, [\vol, v * 1.3]);
+				Synth.new(\Foghorn, [\vol, v]);
 			});
 		});
 	}
