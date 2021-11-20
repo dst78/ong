@@ -1,5 +1,5 @@
 -- ocean noise generator
---   v1.0.2 @AnoikisNomads
+--   v1.0.4 @AnoikisNomads
 --
 -- _,/'2_,/'2_,/'2_,/'2_,/'2_,/'2_
 --
@@ -37,11 +37,7 @@ function init()
 end
 
 function key(n,z)
-  if z == 1 then
-    keydown[n] = true
-  else
-    keydown[n] = false
-  end
+  keydown[n] = (z == 1)
 
   if keydown[1] == true then
     displayMode = 1 -- help
@@ -68,7 +64,7 @@ function enc(n, d)
 
     elseif keydown[2] == false and keydown[3] == true then
       params:delta("foamAmp",d)
-      Help.line("K3+E2", util.round(params:get("foamAmp"), 0.01))
+      Help.line("K3+E2", params:get("foamAmp"))
     end
 
   elseif n == 3 then
@@ -82,7 +78,7 @@ function enc(n, d)
 
     elseif keydown[2] == false and keydown[3] == true then
       params:delta("ambienceAmp",d)
-      Help.line("K3+E3", util.round(params:get("ambienceAmp"), 0.01))
+      Help.line("K3+E3", util.round(params:get("ambienceAmp"), 0.0001))
     end
   else
     print("logic broke. HALP")
@@ -97,6 +93,7 @@ function redraw()
 
   if displayMode == 0 then    -- standard screen
     Gfx.display()
+    Gfx.kraken()
     Help.displayLine()
   elseif displayMode == 1 then    -- help screen
     Help.display()
@@ -125,5 +122,14 @@ end
 function compressorRestore()
   if compressorWasOn then
     params:set("compressor", 2)
+  end
+end
+
+function foghorn()
+  local f = Counters.getFrame()
+
+  if Params.foghornsEnabled and f >= Counters.horn then
+    engine.triggerFoghorn(math.max(params:get("nearWavesAmp"), params:get("farWavesAmp")) * 0.01)
+    Counters.horn = math.random(f + 3500, f + 10000)
   end
 end

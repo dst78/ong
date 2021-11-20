@@ -20,22 +20,22 @@ Engine_Ong : CroneEngine {
 			arg out,
 			overallAmpl=1.0,
 			nearWavesBaseAmpl=0.7,
-			nearWavesSpeedL=0.15,
-			nearWavesSpeedR=0.17,
+			nearWavesSpeedL=0.11,
+			nearWavesSpeedR=0.13,
 			nearWavesFilterCutoff=3000,
 			farWavesBaseAmpl=0.5,
-			farWavesSpeed=0.13,
+			farWavesSpeed=0.1,
 			farWavesFilterCutoff=840,
-			nearFoamAmpl=0.002,
+			nearFoamAmpl=0.08,
 			ambienceAmpl=0.003,
 			ambienceFilterCutoff=10000;
 
 			//---- LFOs
 			var nearWavesAmplL = SinOsc.ar(nearWavesSpeedL, 0.0, nearWavesBaseAmpl);
-			var nearFoamAmplL = SinOsc.ar(nearWavesSpeedL, pi / 4, nearFoamAmpl);
+			var nearFoamAmplL = SinOsc.ar(nearWavesSpeedL, 2*(pi/3), nearFoamAmpl);
 			var nearWavesAmplR = SinOsc.ar(nearWavesSpeedR, 0.0, nearWavesBaseAmpl);
-			var nearFoamAmplR = SinOsc.ar(nearWavesSpeedR, pi / 4, nearFoamAmpl);
-			var farWavesAmpl = SinOsc.ar(farWavesSpeed, 0.0, farWavesBaseAmpl); 
+			var nearFoamAmplR = SinOsc.ar(nearWavesSpeedR, 2*(pi/3), nearFoamAmpl);
+			var farWavesAmpl = SinOsc.ar(farWavesSpeed, 0.0, farWavesBaseAmpl);
 
 			//---- sound generators
 			var nearWavesL = LPF.ar(PinkNoise.ar(1.0, 0.0), nearWavesFilterCutoff, 1.0, 0.0);
@@ -50,14 +50,14 @@ Engine_Ong : CroneEngine {
 				Mix.new([
 					nearWavesL * 0.7 * nearWavesAmplL,
 					nearWavesR * 0.1 * nearWavesAmplR,
-					nearFoamL * nearFoamAmplL,
+					nearFoamL * nearFoamAmplL*nearFoamAmplL,
 					ambience * ambienceAmpl,
 					farWaves * farWavesAmpl
 				]) * overallAmpl, // left stereo
 				Mix.new([
 					nearWavesL * 0.1 * nearWavesAmplL,
 					nearWavesR * 0.7 * nearWavesAmplR,
-					nearFoamR * nearFoamAmplR,
+					nearFoamR * nearFoamAmplR*nearFoamAmplR,
 					ambience * ambienceAmpl,
 					farWaves * farWavesAmpl
 				]) * overallAmpl  // right stereo

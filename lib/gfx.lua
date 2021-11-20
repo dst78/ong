@@ -6,6 +6,7 @@ Gfx.waveHeight = 30
 Gfx.wavesSpeed = 0.17
 Gfx.wavesAmp = 23
 Gfx.waveMatrix1 = {{0, 0, 0, 0, 2, 0, 0, 0, 0, 0}, {0, 0, 0, 1, 1, 1, 1, 0, 0, 0}, {0, 0, 0, 0, 1, 1, 1, 1, 0, 0}, {0, 0, 0, 0, 1, 1, 1, 1, 0, 0}, {0, 0, 0, 1, 1, 1, 1, 0, 0, 0}, {1, 1, 0, 0, 2, 0, 0, 0, 0, 0}, {1, 2, 2, 2, 2, 2, 2, 2, 2, 2}, {1, 1, 0, 1, 0, 1, 0, 1, 0, 0}, {0, 1, 1, 1, 1, 1, 1, 0, 0, 0}}
+Gfx.waveMatrix1F = 100;
 Gfx.waveMatrix2 = {{0, 0, 0, 1, 1, 1, 4, 4, 0, 0, 0, 0}, {0, 0, 1, 1, 1, 1, 1, 1, 4, 0, 0, 0}, {0, 1, 1, 2, 2, 2, 2, 2, 2, 4, 0, 0}, {1, 1, 2, 2, 2, 2, 2, 2, 2, 4, 0, 0}, {1, 1, 2, 2, 5, 9, 1, 2, 9, 2, 0, 0}, {1, 1, 2, 2, 5, 1, 2, 1, 5, 1, 0, 0}, {1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 4, 0}, {0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 4, 0}, {0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 0, 0}, {0, 1, 2, 1, 2, 2, 2, 1, 2, 2, 4, 0}, {0, 1, 2, 2, 2, 2, 3, 2, 1, 2, 4, 0}, {1, 2, 2, 1, 1, 1, 2, 4, 1, 1, 2, 4}, {1, 1, 1, 0, 0, 1, 1, 4, 0, 1, 1, 2}, {0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0}}
 Gfx.matrix2OffsetX = 0
 Gfx.matrix2OffsetY = 0
@@ -38,9 +39,6 @@ function Gfx.display()
   Gfx.wavesSpeed = util.clamp(params:get("nearWavesSpeed"), 0.05, 1.0)
   Gfx.wavesAmp = params:get("nearWavesAmp")
 
-  -- update matrices
-  Gfx.s(-1350 + f % 1500, Gfx.baseY - 9, Gfx.waveMatrix1)
-
   -- near waves
   for i,w in ipairs(Gfx.waves) do
     if w ~= nil then
@@ -49,10 +47,8 @@ function Gfx.display()
     end
   end
 
-  Gfx.m2(f)
-
   -- foam
-  local fL = 4 * math.log(params:get("foamAmp"))
+  local fL = 4 * math.log(params:get("foamAmp") + 0.1)
   for n = 0,fL*math.sin(f / (2.4 / Gfx.wavesSpeed) - 1.8) do
     y = math.random(60, 63)
     Gfx.setLevel(y)
@@ -110,7 +106,16 @@ function Gfx.setLevel(y)
   screen.level(level)
 end
 
-function Gfx.m2(f)
+--[[
+    Gfx.sprite(-20 + (f - Counters.horn), Gfx.baseY - 9, Counters.horn)
+    if (Counters.horn + 150) < f then
+    elseif Counters.horn + 74 == f then
+
+    end
+--]]
+
+function Gfx.kraken()
+  local f = Counters.getFrame()
   local o2 = math.sin(f/20) * 12
 
   if o2 > 0 and o2 < 0.3 and math.random(0, 100) > 95 then
@@ -122,11 +127,11 @@ function Gfx.m2(f)
   end
 
   if Gfx.matrix2Draw == true then
-    Gfx.s(Gfx.matrix2OffsetX, Gfx.baseY + Gfx.matrix2OffsetY - o2, Gfx.waveMatrix2, o2)
+    Gfx.sprite(Gfx.matrix2OffsetX, Gfx.baseY + Gfx.matrix2OffsetY - o2, Gfx.waveMatrix2, o2)
   end
 end
 
-function Gfx.s(x, y, s, stopy)
+function Gfx.sprite(x, y, s, stopy)
   local lx = tab.count(s[1])
   local ly = tab.count(s)
   stopy = stopy or ly
