@@ -109,7 +109,7 @@ Engine_Ong : CroneEngine {
 			thunderReverb = GVerb.ar(thunder, thunderSize, thunderTime, 0.7, drylevel: 0.5) * thunderVol * Line.kr(0, thunderVol, 30);
 			thunderReverb = LPF.ar(thunderReverb, thunderCutoff);
 
-			sig = Mix.new([rainReverb * vol, thunderReverb * vol]);
+			sig = Mix.new([rainReverb, thunderReverb]) * vol;
 			sig = Limiter.ar(sig);
 
 			Out.ar(out, sig);
