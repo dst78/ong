@@ -39,24 +39,6 @@ function Params.init()
   params:set_action("foghornProbability", function() Foghorn.setF() end)
   params:add_trigger("triggerFoghorn", "sound foghorn")
   params:set_action("triggerFoghorn", Foghorn.trigger)
-
-  params:add_separator("weather")
-  Params.dynamicWeather = false
-  params:add_option("weatherIsDynamic", "dynamic weather", {"NO", "YES"})
-  params:set_action("weatherIsDynamic", function(index) Params.weatherIsDynamic = (index == 2) end)
-  params:add_number("weatherAmp", "weather amplitude", 0, 100, 0)
-  params:set_action("weatherAmp", function(x) engine.weatherOverallAmp(x*0.01) end)
-  params:add_number("rainAmp", "rain amplitude", 0, 100, 100)
-  params:set_action("rainAmp", function(x) engine.weatherRainAmp(x*0.01) end)
-  params:add_number("thunderAmp", "thunder amplitude", 0, 100, 70)
-  params:set_action("thunderAmp", function(x) engine.weatherThunderAmp(x*0.01) end)
-  params:add_number("thunderSize", "thunder size", 1, 270, 270)
-  params:set_action("thunderSize", function(x) engine.weatherThunderSize(x) end)
-  params:add_number("thunderTime", "thunder duration", 1, 40, 8)
-  params:set_action("thunderTime", function(x) engine.weatherThunderTime(x) end)
-  params:add_control("thunderCutoff", "thunder filter freq", controlspec.new(20, 5000, "exp", 0, 700, "hz"))
-  params:set_action("thunderCutoff", function(x) engine.weatherFilterCutoff(x) end)
-
 end
 
 return Params
