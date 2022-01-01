@@ -6,7 +6,6 @@ function Foghorn.update(f)
   if f >= Foghorn.f then
     Foghorn.setF()
     if Params.foghornsEnabled then Foghorn.trigger() end
---      engine.triggerFoghorn(math.max(params:get("nearWavesAmp"), params:get("farWavesAmp")) * 0.01)
   end
 end
 
