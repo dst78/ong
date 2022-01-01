@@ -17,7 +17,7 @@ end
 function Foghorn.trigger()
   if params:get("foghornAmp") > 0 then
     engine.triggerFoghorn(0.01 * math.random(1, params:get("foghornAmp")))
-    if math.random(0, 100) < 2 then Gfx.doDrawShip() end
+    if math.random(0, 100) < 10 then Gfx.doDrawShip() end
   end
 end
 
