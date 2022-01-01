@@ -48,7 +48,7 @@ ONG is deeply inspired by the Ocean Noise Generator "guitar" pedal built by [Syn
 v1.1.0 viscosity
 * re-coupled the wave graphics to the sound engine parameters for a more pleasant
 tweaking experience. the graphic generation has been optimized and should be lag-free now
-* vastly improved the ambience tweak-ability in the parameter menu
+* improved the ambience tweak-ability in the parameter menu
 * cleaned up sound engine to allow for total silence through the various volume controls
 * general code cleanup
 
